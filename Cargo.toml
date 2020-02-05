@@ -1,0 +1,13 @@
+# cargo
+
+# [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*cargo][cargo:1]]
+[package]
+name = "gchemol-geometry"
+version = "0.1.0-alpha1"
+edition = "2018"
+authors = ["Wenping Guo <ybyygu@gmail.com>"]
+
+[dependencies]
+
+[dev-dependencies]
+# cargo:1 ends here
