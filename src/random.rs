@@ -1,7 +1,7 @@
 // imports
 
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
-use rand::distributions::{Normal, Range};
+use rand::distributions::{Normal, Uniform};
 use rand::{self, Rng};
 
 use crate::base::euclidean_distance;
@@ -27,7 +27,7 @@ pub fn rand_point_within_sphere(radius: f64) -> Point3D {
         radius
     );
     let mut rng = rand::thread_rng();
-    let range = Range::new(-radius, radius);
+    let range = Uniform::new(-radius, radius);
 
     // using the discarding method, which is simple and also fast
     let radius2 = radius * radius;
@@ -75,7 +75,7 @@ pub fn rand_point_on_sphere(radius: f64) -> Point3D {
 /// * ntps: the number of points to be generated
 pub fn rand_points_within_sphere(radius: f64, npts: usize) -> Points {
     let mut rng = rand::thread_rng();
-    let range = Range::new(-radius, radius);
+    let range = Uniform::new(-radius, radius);
 
     // using the discarding method, which is simple and also fast
     let radius2 = radius * radius;
