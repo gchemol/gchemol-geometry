@@ -1,8 +1,11 @@
-// lib.rs
-// :PROPERTIES:
-// :header-args: :tangle src/lib.rs
-// :END:
+// mods
 
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*lib.rs][lib.rs:1]]
+// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*mods][mods:1]]
+mod alignment;
+// mods:1 ends here
 
-// lib.rs:1 ends here
+// pub
+
+// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*pub][pub:1]]
+pub use alignment::*;
+// pub:1 ends here
