@@ -3,17 +3,23 @@
 # [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*cargo][cargo:1]]
 [package]
 name = "gchemol-geometry"
-version = "0.1.0-alpha1"
+version = "0.0.36"
 edition = "2018"
 authors = ["Wenping Guo <ybyygu@gmail.com>"]
+description = "gchemol: a Graph-based CHEMical Objects Library"
+homepage = "https://github.com/gchemol/gchemol-geometry"
+repository = "https://github.com/gchemol/gchemol-geometry"
+license = "MIT OR Apache-2.0"
 
 [dependencies]
-vecfx = { git = "https://github.com/gchemol/vecfx.git", features = ["nalgebra"] }
-guts = { git = "https://github.com/ybyygu/guts.git", branch="dev" }
 rand = "0.7"
+rand_distr = "0.2"
+vecfx = { version = "0.0.8", features = ["nalgebra"] }
+gchemol-gut = "0.0.7"
 
 [dev-dependencies]
 approx = "0.3"
 tempfile = "3"
-gchemol = { path = "../gchemol" }
+gchemol-core = "0.0.37"
+gchemol-readwrite = "0.0.36"
 # cargo:1 ends here

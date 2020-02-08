@@ -1,7 +1,7 @@
 // imports
 
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
-use guts::prelude::*;
+use gchemol_gut::prelude::*;
 use vecfx::*;
 
 use vecfx::nalgebra as na;
@@ -144,8 +144,8 @@ pub(super) fn calc_rmsd_rotational_matrix(
 #[test]
 fn test_quaterion() {
     use super::qcprot;
-    use gchemol::Molecule;
-    use gchemol::prelude::*;
+    use gchemol_core::Molecule;
+    use gchemol_readwrite::prelude::*;
 
     let positions_ref = vec![[ 0.     ,  0.     ,  0.50222],
                              [ 0.     ,  0.     ,  1.57133],

@@ -8,7 +8,7 @@ mod qcprot;
 // imports
 
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
-use guts::prelude::*;
+use gchemol_gut::prelude::*;
 
 use vecfx::Matrix3f;
 use vecfx::Vector3f;

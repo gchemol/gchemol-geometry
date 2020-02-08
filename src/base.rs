@@ -1,7 +1,7 @@
 // imports
 
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
-use guts::prelude::*;
+use gchemol_gut::prelude::*;
 use vecfx::*;
 // imports:1 ends here
 
@@ -31,7 +31,7 @@ pub fn weighted_center_of_geometry(positions: &[[f64; 3]], weights: &[f64]) -> R
     }
 
     // deviding by zero?
-    let mut wsum = weights.sum();
+    let wsum = weights.sum();
     if wsum < 1e-6 {
         error!("weird weight sum: {:?}", wsum);
     }

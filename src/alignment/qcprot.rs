@@ -96,7 +96,7 @@
 // imports
 
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
-use guts::prelude::*;
+use gchemol_gut::prelude::*;
 // imports:1 ends here
 
 // core
@@ -437,7 +437,6 @@ pub(super) fn calc_rmsd_rotational_matrix(
     let (rmsd, rot) = fast_calc_rmsd_and_rotation(&mat_a, e0, wsum, -1.0);
 
     // rotated center2
-    let mut rotc = [0.0; 3];
     let rotc = if let Some(r) = rot {
         [
             r[0] * center2[0] + r[1] * center2[1] + r[2] * center2[2],
@@ -459,7 +458,7 @@ pub(super) fn calc_rmsd_rotational_matrix(
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*test][test:1]]
 /// test data provided in main.c
 pub(crate) fn prepare_test_data() -> (Vec<[f64; 3]>, Vec<[f64; 3]>, Vec<f64>) {
-    let mut frag_a = vec![
+    let frag_a = vec![
         [-2.803, -15.373, 24.556],
         [0.893, -16.062, 25.147],
         [1.368, -12.371, 25.885],
@@ -469,7 +468,7 @@ pub(crate) fn prepare_test_data() -> (Vec<[f64; 3]>, Vec<[f64; 3]>, Vec<f64>) {
         [0.105, -11.330, 33.567],
     ];
 
-    let mut frag_b = vec![
+    let frag_b = vec![
         [-14.739, -18.673, 15.040],
         [-12.473, -15.810, 16.074],
         [-14.802, -13.307, 14.408],

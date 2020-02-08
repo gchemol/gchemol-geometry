@@ -8,9 +8,9 @@
 #[test]
 fn test_alignment() {
     use approx::*;
-    use gchemol::prelude::*;
-    use gchemol::Molecule;
+    use gchemol_core::Molecule;
     use gchemol_geometry::Alignment;
+    use gchemol_readwrite::prelude::*;
     use vecfx::*;
 
     // load test molecules

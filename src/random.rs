@@ -1,8 +1,9 @@
 // imports
 
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
-use rand::distributions::{Normal, Uniform};
+use rand::distributions::Uniform;
 use rand::{self, Rng};
+use rand_distr::Normal;
 
 use crate::base::euclidean_distance;
 use crate::transform::*;
@@ -50,8 +51,7 @@ pub fn rand_point_on_sphere(radius: f64) -> Point3D {
 
     let mut rng = rand::thread_rng();
 
-    let radius2 = radius * radius;
-    let normal = Normal::new(0.0, 10.0);
+    let normal = Normal::new(0.0, 10.0).expect("normal distr");
     // avoid floating point precision lost when dividing by a very small number.
     let min_radius2 = 0.1;
     loop {
