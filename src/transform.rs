@@ -5,9 +5,9 @@ use super::euclidean_distance;
 use vecfx::nalgebra::{Rotation3, Vector3};
 // imports:1 ends here
 
-// src
+// impl
 
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*src][src:1]]
+// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*impl][impl:1]]
 type Point3 = [f64; 3];
 type Points = Vec<Point3>;
 
@@ -43,7 +43,7 @@ pub fn close_contact(points: &Points) -> bool {
 }
 
 /// Return all distances between any pair of points
-pub fn get_distance_matrix(points: Points) -> Vec<Vec<f64>> {
+pub fn get_distance_matrix(points: &[Point3]) -> Vec<Vec<f64>> {
     let npts = points.len();
 
     // fill distance matrix
@@ -75,4 +75,4 @@ pub fn rotate_about_x_axis(points: &Points, angle: f64, center: Point3) -> Point
 
     rpoints
 }
-// src:1 ends here
+// impl:1 ends here
