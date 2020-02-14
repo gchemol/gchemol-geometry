@@ -1,7 +1,7 @@
 // imports
 
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
-use super::euclidean_distance;
+use crate::base::euclidean_distance;
 use vecfx::nalgebra::{Rotation3, Vector3};
 // imports:1 ends here
 
