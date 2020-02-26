@@ -2,7 +2,11 @@
 
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
 use crate::base::euclidean_distance;
-use vecfx::nalgebra::{Rotation3, Vector3};
+
+use vecfx::nalgebra as na;
+use vecfx::*;
+
+use na::{Rotation3, Vector3};
 // imports:1 ends here
 
 // impl
@@ -74,5 +78,19 @@ pub fn rotate_about_x_axis(points: &Points, angle: f64, center: Point3) -> Point
     }
 
     rpoints
+}
+
+/// Return mirror inverted structure
+pub fn mirror_invert(positions: &[[f64; 3]]) -> Vector3fVec {
+    let m = positions.to_matrix();
+    let r = na::Matrix3::from_diagonal(&[1.0, 1.0, -1.0].into());
+    r * m
+}
+
+/// Return point inverted structure
+pub fn point_invert(positions: &[[f64; 3]]) -> Vector3fVec {
+    let m = positions.to_matrix();
+    let r = na::Matrix3::from_diagonal(&[-1.0, -1.0, -1.0].into());
+    r * m
 }
 // impl:1 ends here
