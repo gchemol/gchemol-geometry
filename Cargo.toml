@@ -19,7 +19,6 @@ gchemol-gut = "0.1.3"
 [dev-dependencies]
 approx = "0.3"
 tempfile = "3"
-gchemol = ">=0.0.37"            # FIXME: remove?
 
 [features]
 adhoc = [] # for adhoc hacking
