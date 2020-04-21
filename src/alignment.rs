@@ -1,20 +1,13 @@
-// mods
-
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*mods][mods:1]]
 mod qcprot;
-// mod quaternion;
+mod quaternion;
 // mods:1 ends here
-
-// imports
 
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
 use gchemol_gut::prelude::*;
 
-use vecfx::Matrix3f;
-use vecfx::Vector3f;
+use vecfx::*;
 // imports:1 ends here
-
-// superpose
 
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*superpose][superpose:1]]
 #[derive(Clone, Copy, Debug)]
@@ -51,6 +44,12 @@ impl Superposition {
             let v = Vector3f::from(v);
             let v = self.rotation_matrix * v + self.translation;
             res.push(v.into());
+        }
+
+        // detect NaN floats
+        if res.as_flat().iter().any(|x| x.is_nan()) {
+            dbg!(&self);
+            panic!("found invalid float numbers!");
         }
 
         res
@@ -120,8 +119,7 @@ impl<'a> Alignment<'a> {
         let (rmsd, trans, rot) = match self.algorithm {
             SuperpositionAlgo::QCP => self::qcprot::calc_rmsd_rotational_matrix(&reference, &self.positions, weights),
             SuperpositionAlgo::Quaternion => {
-                // self::quaternion::calc_rmsd_rotational_matrix(&reference, &self.positions, weights)
-                todo!()
+                self::quaternion::calc_rmsd_rotational_matrix(&reference, &self.positions, weights)
             }
         };
 
@@ -143,8 +141,6 @@ impl<'a> Alignment<'a> {
     }
 }
 // superpose:1 ends here
-
-// test
 
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*test][test:1]]
 #[test]
@@ -176,3 +172,26 @@ fn test_alignment() {
     assert_relative_eq!(rot_expected, rot, epsilon = 1e-4);
 }
 // test:1 ends here
+
+// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*test][test:2]]
+#[test]
+fn test_alignment_hcn() {
+    use vecfx::*;
+
+    let positions_ref = [
+        [0.83334699, 0.716865, 0.0],
+        [-0.5486581, -0.35588, 0.0],
+        [-0.2855828, 1.036928, 0.0],
+    ];
+
+    let positions_can = [[-0.634504, -0.199638, -0.0], [0.970676, 0.670662, 0.0], [-0.337065, 0.926883, 0.0]];
+
+    let weights = vec![0.0001; 3];
+    let sp = Alignment::new(&positions_can).superpose(&positions_ref, Some(&weights)).unwrap();
+    assert_relative_eq!(sp.rmsd, 0.0614615, epsilon = 1e-4);
+
+    let t = Vector3f::from([0.423160235, 0.2715202, 0.0]);
+    let r = Matrix3f::from_column_slice(&[-0.4167190, -0.9090353, 0.0, -0.909035, 0.4167190, 0.0, 0.0, 0.0, -1.0]);
+    assert_relative_eq!(sp.rotation_matrix, r, epsilon = 1e-4);
+}
+// test:2 ends here

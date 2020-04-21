@@ -1,5 +1,3 @@
-// imports
-
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
 use gchemol_gut::prelude::*;
 use vecfx::*;
@@ -7,32 +5,28 @@ use vecfx::*;
 use vecfx::nalgebra as na;
 // imports:1 ends here
 
-// core
-// # References
-// - B. K. P. Horn, J. Opt. Soc. Am. A, JOSAA, 1987, DOI:10.1364/JOSAA.4.000629.
-// - D. L. Theobald, Acta Crystallogr. A, 2005, DOI:10.1107/S0108767305015266.
-// - P. Liu, D. K. Agrafiotis, D. L. Theobald, J. Comput. Chem., 2010, DOI:10.1002/jcc.21439.
-
-
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*core][core:1]]
 pub(super) fn calc_rmsd_rotational_matrix(
     positions_ref: &[[f64; 3]],
     positions_can: &[[f64; 3]],
     weights: Option<&[f64]>,
 ) -> (f64, [f64; 3], Option<[f64; 9]>) {
+    info!("calculate using quaternion algorithm ...");
+
     let npts = positions_ref.len();
+    assert_eq!(npts, positions_can.len(), "invalid position array size");
 
     // set up weights for atoms
     let default_weights = vec![1.0; npts];
     let weights = weights.unwrap_or(&default_weights);
 
     // FIXME: Option
-    let com_ref = positions_ref.center_of_mass(weights).unwrap();
-    let com_can = positions_can.center_of_mass(weights).unwrap();
+    let com_ref = crate::weighted_center_of_geometry(&positions_ref, weights).unwrap();
+    let com_can = crate::weighted_center_of_geometry(&positions_can, weights).unwrap();
 
     // 1. center coordinates of the reference and the candidate
-    let mut vectors_ref = positions_ref.to_vectors();
-    let mut vectors_can = positions_can.to_vectors();
+    let mut vectors_ref: Vec<_> = positions_ref.iter().map(|p| p.to_vector()).collect();
+    let mut vectors_can: Vec<_> = positions_can.iter().map(|p| p.to_vector()).collect();
     for mut v in vectors_ref.iter_mut() {
         *v -= com_ref;
     }
@@ -95,77 +89,38 @@ pub(super) fn calc_rmsd_rotational_matrix(
         q[0].powi(2) - q[1].powi(2) - q[2].powi(2) + q[3].powi(2),
     ];
 
-    // FIXME: dirty fixing
-    let mut rotx = rot.clone();
-    for i in 0..6 {
-        rotx[i] = -1.0 * rot[i];
-    }
-
     // or using nalgebra's library call
     // let q = na::geometry::Quaternion::new(q[0], q[1], q[2], q[3]);
     // let rot = na::geometry::UnitQuaternion::from_quaternion(q).to_rotation_matrix();
-    let rotation = Some(rotx);
 
     // 6. calculate superposition rmsd
-    let mut rmsd = 0.0f64;
     // rmsd += G_A + G_B
+    let mut rmsd = 0.0f64;
     for i in 0..npts {
         let wi = weights[i];
-        let vcan = vectors_can[i] * wi;
-        let vref = vectors_ref[i] * wi;
+        let vcan = &vectors_can[i] * wi;
+        let vref = &vectors_ref[i] * wi;
         rmsd += vcan.norm_squared() + vref.norm_squared();
     }
 
     let emax = se.eigenvalues.as_slice().max();
     let wsum = weights.sum() as f64;
-    let rmsd = ((rmsd - 2.0 * emax) / wsum).sqrt();
+    // FIXME: wrong rmsd, avoid NaN
+    let rmsd = ((dbg!(rmsd) - 2.0 * dbg!(emax)) / dbg!(wsum)).sqrt();
 
     // 7. calculate translation
-    let mut rotc = [0.0; 3];
-    let rotc = if let Some(r) = rotation {
+    let rotc = {
+        let r = &rot;
         vec![
             r[0] * com_can[0] + r[1] * com_can[1] + r[2] * com_can[2],
             r[3] * com_can[0] + r[4] * com_can[1] + r[5] * com_can[2],
             r[6] * com_can[0] + r[7] * com_can[1] + r[8] * com_can[2],
         ]
-    } else {
-        com_can.as_slice().to_vec()
     };
+    let rotation = Some(rot);
 
+    // recalculate superpostion rmsd
     let trans = [com_ref[0] - rotc[0], com_ref[1] - rotc[1], com_ref[2] - rotc[2]];
     return (rmsd, trans, rotation);
 }
 // core:1 ends here
-
-// test
-// This is an example where the original QCP program gives the incorrect result.
-
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*test][test:1]]
-#[test]
-fn test_quaterion() {
-    use super::qcprot;
-    use gchemol_core::Molecule;
-    use gchemol_readwrite::prelude::*;
-
-    let positions_ref = vec![[ 0.     ,  0.     ,  0.50222],
-                             [ 0.     ,  0.     ,  1.57133],
-                             [ 0.     ,  0.     , -0.65495]];
-
-    let positions_can = vec![[-0.35846,  0.02588,  0.47287],
-                             [ 0.28996,  1.02611,  0.47287],
-                             [ 0.0685 , -1.05199,  0.47287]];
-
-    let (r1, tran1, rot1) = calc_rmsd_rotational_matrix(&positions_ref, &positions_can, None);
-    let (r2, tran2, rot2) = qcprot::calc_rmsd_rotational_matrix(&positions_ref, &positions_can, None);
-    assert_relative_eq!(r1, r2, epsilon=1e-3);
-    for i in 0..3 {
-        assert_relative_eq!(tran1[i], tran2[i], epsilon=1e-3);
-    }
-
-    let rot1 = rot1.expect("rot1");
-    let rot2 = rot2.expect("rot2");
-    for i in 0..9 {
-        assert_relative_eq!(rot1[i], rot2[i], epsilon=1e-3);
-    }
-}
-// test:1 ends here

@@ -1,4 +1,6 @@
-// header
+// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
+use gchemol_gut::prelude::*;
+// imports:1 ends here
 
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*header][header:1]]
 // Author of Rust Port:
@@ -93,14 +95,6 @@
 //                    sum of weights (thanks to Geoff Skillman)
 // header:1 ends here
 
-// imports
-
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
-use gchemol_gut::prelude::*;
-// imports:1 ends here
-
-// core
-
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*core][core:1]]
 /// Calculate the inner product of two structures.
 ///
@@ -121,13 +115,7 @@ use gchemol_gut::prelude::*;
 /// ------
 /// (arr_a, e0): inner product array and e0 (inputs for fast_calc_rmsd_and_rotation)
 ///
-fn inner_product(
-    coords1: &[[f64; 3]],
-    center1: &[f64; 3],
-    coords2: &[[f64; 3]],
-    center2: &[f64; 3],
-    weights: Option<&[f64]>,
-) -> ([f64; 9], f64) {
+fn inner_product(coords1: &[[f64; 3]], center1: &[f64; 3], coords2: &[[f64; 3]], center2: &[f64; 3], weights: &[f64]) -> ([f64; 9], f64) {
     let natoms = coords1.len();
     debug_assert!(natoms == coords2.len());
 
@@ -138,7 +126,8 @@ fn inner_product(
     let mut g2 = 0.0;
     for i in 0..natoms {
         // take the weight if any, or set it to 1.0
-        let wi = weights.map_or_else(|| 1.0, |v| v[i]);
+        // let wi = weights.map_or_else(|| 1.0, |v| v[i]);
+        let wi = weights[i];
 
         let cx1 = coords1[i][0] - center1[0];
         let cy1 = coords1[i][1] - center1[1];
@@ -206,8 +195,7 @@ fn fast_calc_rmsd_and_rotation(mat_a: &[f64; 9], e0: f64, wsum: f64, min_score: 
 
     let mut arr_c = [0.0; 4];
     arr_c[2] = -2.0 * (sxx2 + syy2 + szz2 + sxy2 + syx2 + sxz2 + szx2 + syz2 + szy2);
-    arr_c[1] = 8.0
-        * (sxx * syz * szy + syy * szx * sxz + szz * sxy * syx - sxx * syy * szz - syz * szx * sxy - szy * syx * sxz);
+    arr_c[1] = 8.0 * (sxx * syz * szy + syy * szx * sxz + szz * sxy * syx - sxx * syy * szz - syz * szx * sxy - szy * syx * sxz);
 
     let sxzpszx = sxz + szx;
     let syzpszy = syz + szy;
@@ -221,14 +209,10 @@ fn fast_calc_rmsd_and_rotation(mat_a: &[f64; 9], e0: f64, wsum: f64, min_score: 
 
     arr_c[0] = sxy2sxz2syx2szx2 * sxy2sxz2syx2szx2
         + (sxx2syy2szz2syz2szy2 + syzszymsyyszz2) * (sxx2syy2szz2syz2szy2 - syzszymsyyszz2)
-        + (-(sxzpszx) * (syzmszy) + (sxymsyx) * (sxxmsyy - szz))
-            * (-(sxzmszx) * (syzpszy) + (sxymsyx) * (sxxmsyy + szz))
-        + (-(sxzpszx) * (syzpszy) - (sxypsyx) * (sxxpsyy - szz))
-            * (-(sxzmszx) * (syzmszy) - (sxypsyx) * (sxxpsyy + szz))
-        + ((sxypsyx) * (syzpszy) + (sxzpszx) * (sxxmsyy + szz))
-            * (-(sxymsyx) * (syzmszy) + (sxzpszx) * (sxxpsyy + szz))
-        + ((sxypsyx) * (syzmszy) + (sxzmszx) * (sxxmsyy - szz))
-            * (-(sxymsyx) * (syzpszy) + (sxzmszx) * (sxxpsyy - szz));
+        + (-(sxzpszx) * (syzmszy) + (sxymsyx) * (sxxmsyy - szz)) * (-(sxzmszx) * (syzpszy) + (sxymsyx) * (sxxmsyy + szz))
+        + (-(sxzpszx) * (syzpszy) - (sxypsyx) * (sxxpsyy - szz)) * (-(sxzmszx) * (syzmszy) - (sxypsyx) * (sxxpsyy + szz))
+        + ((sxypsyx) * (syzpszy) + (sxzpszx) * (sxxmsyy + szz)) * (-(sxymsyx) * (syzmszy) + (sxzpszx) * (sxxpsyy + szz))
+        + ((sxypsyx) * (syzmszy) + (sxzmszx) * (sxxmsyy - szz)) * (-(sxymsyx) * (syzpszy) + (sxzmszx) * (sxxpsyy - szz));
 
     // Newton-Raphson
     let mut mx_eigenv = e0;
@@ -382,14 +366,15 @@ fn fast_calc_rmsd_and_rotation(mat_a: &[f64; 9], e0: f64, wsum: f64, min_score: 
     (rms, Some(rot))
 }
 
-fn get_center_of_coords(coords: &[[f64; 3]], weights: Option<&[f64]>) -> [f64; 3] {
+fn get_center_of_coords(coords: &[[f64; 3]], weights: &[f64]) -> [f64; 3] {
     let mut xsum = 0.0;
     let mut ysum = 0.0;
     let mut zsum = 0.0;
 
     let mut wsum = 0.0;
     for i in 0..coords.len() {
-        let wi = weights.map_or_else(|| 1.0, |v| v[i]);
+        // let wi = weights.map_or_else(|| 1.0, |v| v[i]);
+        let wi = weights[i];
         xsum += wi * coords[i][0];
         ysum += wi * coords[i][1];
         zsum += wi * coords[i][2];
@@ -422,16 +407,29 @@ pub(super) fn calc_rmsd_rotational_matrix(
     coords2: &[[f64; 3]],
     weights: Option<&[f64]>,
 ) -> (f64, [f64; 3], Option<[f64; 9]>) {
-    // calculate the centers of the structures
-    let center1 = get_center_of_coords(coords1, weights);
-    let center2 = get_center_of_coords(coords2, weights);
-
     // the sum of weights
     let n = coords1.len();
-    let wsum = weights.map_or_else(|| n as f64, |v| v.iter().sum());
+    let weights = if let Some(w) = weights {
+        debug_assert_eq!(w.len(), n, "invalid number of weights!");
+        let wsum: f64 = w.iter().sum();
+        // HACK: if weights are too small, QCP iteration will produce NaN floats
+        // for noises.
+        if wsum < 1.0 {
+            w.iter().map(|x| x / wsum).collect()
+        } else {
+            w.to_vec()
+        }
+    } else {
+        vec![1.0; n]
+    };
+    let wsum: f64 = weights.iter().sum();
+
+    // calculate the centers of the structures
+    let center1 = get_center_of_coords(coords1, &weights);
+    let center2 = get_center_of_coords(coords2, &weights);
 
     // calculate the (weighted) inner product of two structures
-    let (mat_a, e0) = inner_product(&coords1, &center1, &coords2, &center2, weights);
+    let (mat_a, e0) = inner_product(&coords1, &center1, &coords2, &center2, &weights);
 
     // calculate the RMSD & rotational matrix
     let (rmsd, rot) = fast_calc_rmsd_and_rotation(&mat_a, e0, wsum, -1.0);
@@ -452,8 +450,6 @@ pub(super) fn calc_rmsd_rotational_matrix(
     (rmsd, translation, rot)
 }
 // core:1 ends here
-
-// test
 
 // [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*test][test:1]]
 /// test data provided in main.c
