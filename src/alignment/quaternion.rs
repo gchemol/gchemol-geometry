@@ -21,8 +21,8 @@ pub(super) fn calc_rmsd_rotational_matrix(
     let weights = weights.unwrap_or(&default_weights);
 
     // FIXME: Option
-    let com_ref = crate::weighted_center_of_geometry(&positions_ref, weights).unwrap();
-    let com_can = crate::weighted_center_of_geometry(&positions_can, weights).unwrap();
+    let com_ref = crate::base::weighted_center_of_geometry(&positions_ref, weights).unwrap();
+    let com_can = crate::base::weighted_center_of_geometry(&positions_can, weights).unwrap();
 
     // 1. center coordinates of the reference and the candidate
     let mut vectors_ref: Vec<_> = positions_ref.iter().map(|p| p.to_vector()).collect();
