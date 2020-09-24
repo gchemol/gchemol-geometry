@@ -1,15 +1,17 @@
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*mods][mods:1]]
+// [[file:../gchemol-geometry.note::*mods][mods:1]]
 mod qcprot;
 mod quaternion;
 // mods:1 ends here
 
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
+// [[file:../gchemol-geometry.note::*imports][imports:1]]
 use gchemol_gut::prelude::*;
 
 use vecfx::*;
+
+type Point3 = [f64; 3];
 // imports:1 ends here
 
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*superpose][superpose:1]]
+// [[file:../gchemol-geometry.note::*superpose][superpose:1]]
 #[derive(Clone, Copy, Debug)]
 pub enum SuperpositionAlgo {
     QCP,
@@ -37,7 +39,7 @@ pub struct Superposition {
 }
 
 impl Superposition {
-    /// Apply superposition to other structure
+    /// Apply superposition to other structure `conf`.
     pub fn apply(&self, conf: &[[f64; 3]]) -> Vec<[f64; 3]> {
         let mut res = Vec::with_capacity(conf.len());
         for &v in conf {
@@ -50,6 +52,30 @@ impl Superposition {
         if res.as_flat().iter().any(|x| x.is_nan()) {
             dbg!(&self);
             panic!("found invalid float numbers!");
+        }
+
+        res
+    }
+
+    /// Apply translation to other structure `conf`.
+    pub fn apply_translation(&self, conf: &[Point3]) -> Vec<Point3> {
+        let mut res = Vec::with_capacity(conf.len());
+        for &v in conf {
+            let v = Vector3f::from(v);
+            let v = v + self.translation;
+            res.push(v.into());
+        }
+
+        res
+    }
+
+    /// Apply rotation to other structure `conf`.
+    pub fn apply_rotation(&self, conf: &[Point3]) -> Vec<Point3> {
+        let mut res = Vec::with_capacity(conf.len());
+        for &v in conf {
+            let v = Vector3f::from(v);
+            let v = v + self.rotation_matrix * v;
+            res.push(v.into());
         }
 
         res
@@ -118,9 +144,7 @@ impl<'a> Alignment<'a> {
         // calculate the RMSD & rotational matrix
         let (rmsd, trans, rot) = match self.algorithm {
             SuperpositionAlgo::QCP => self::qcprot::calc_rmsd_rotational_matrix(&reference, &self.positions, weights),
-            SuperpositionAlgo::Quaternion => {
-                self::quaternion::calc_rmsd_rotational_matrix(&reference, &self.positions, weights)
-            }
+            SuperpositionAlgo::Quaternion => self::quaternion::calc_rmsd_rotational_matrix(&reference, &self.positions, weights),
         };
 
         // return unit matrix if two structures are already close enough
@@ -142,7 +166,7 @@ impl<'a> Alignment<'a> {
 }
 // superpose:1 ends here
 
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*test][test:1]]
+// [[file:../gchemol-geometry.note::*test][test:1]]
 #[test]
 fn test_alignment() {
     use approx::*;
@@ -173,7 +197,7 @@ fn test_alignment() {
 }
 // test:1 ends here
 
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*test][test:2]]
+// [[file:../gchemol-geometry.note::*test][test:2]]
 #[test]
 fn test_alignment_hcn() {
     use vecfx::*;
