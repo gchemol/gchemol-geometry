@@ -1,11 +1,34 @@
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*mods][mods:1]]
+// [[file:../gchemol-geometry.note::*docs][docs:1]]
+//! # Example
+//!
+//! ```
+//! // load test molecules
+//! let mol1 = Molecule::from_file("tests/files/alignment/reference.mol2").unwrap();
+//! let mol2 = Molecule::from_file("tests/files/alignment/candidate.mol2").unwrap();
+//! 
+//! // take the first 5 atoms for superposition
+//! let reference: Vec<_> = mol1.positions().take(5).collect();
+//! let candidate: Vec<_> = mol2.positions().take(5).collect();
+//! 
+//! // align the candidate onto the reference
+//! let sp = Superimpose::new(&candidate).onto(&reference, None).unwrap();
+//! 
+//! // apply superposition to all atoms
+//! let superimposed_structure = sp.apply(&candidate);
+//! 
+//! // apply translation only
+//! let translated_structure = sp.apply_translation(&candidate);
+//! ```
+// docs:1 ends here
+
+// [[file:../gchemol-geometry.note::*mods][mods:1]]
 mod alignment;
 mod base;
 mod random;
 mod transform;
 // mods:1 ends here
 
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*pub][pub:1]]
+// [[file:../gchemol-geometry.note::*pub][pub:1]]
 pub use crate::alignment::*;
 
 #[cfg(feature="adhoc")]
