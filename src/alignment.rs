@@ -11,7 +11,7 @@ use vecfx::*;
 type Point3 = [f64; 3];
 // imports:1 ends here
 
-// [[file:../gchemol-geometry.note::*superpose][superpose:1]]
+// [[file:../gchemol-geometry.note::*base][base:1]]
 #[derive(Clone, Copy, Debug)]
 pub enum SuperpositionAlgo {
     QCP,
@@ -81,7 +81,10 @@ impl Superposition {
         res
     }
 }
+// base:1 ends here
 
+// [[file:../gchemol-geometry.note::*alignment/deprecated][alignment/deprecated:1]]
+#[deprecated(note = "use Superimpose instead")]
 /// Alignment of candidate structure onto the reference
 #[derive(Clone, Debug)]
 pub struct Alignment<'a> {
@@ -164,7 +167,92 @@ impl<'a> Alignment<'a> {
         Ok(sp)
     }
 }
-// superpose:1 ends here
+// alignment/deprecated:1 ends here
+
+// [[file:../gchemol-geometry.note::*superimpose][superimpose:1]]
+/// Superimpose of candidate structure onto the reference
+#[derive(Clone, Debug)]
+pub struct Superimpose<'a> {
+    /// The positions of the candidate structure
+    positions: &'a [[f64; 3]],
+
+    /// Select algo
+    pub algorithm: SuperpositionAlgo,
+}
+
+impl<'a> Superimpose<'a> {
+    /// Construct from positions of the candidate to be aligned
+    pub fn new(positions: &'a [[f64; 3]]) -> Self {
+        Self {
+            positions,
+            algorithm: SuperpositionAlgo::default(),
+        }
+    }
+
+    /// Calculate Root-mean-square deviation of self with the reference coordinates
+    ///
+    /// Parameters
+    /// ----------
+    /// * reference: reference coordinates
+    /// * weights  : weight of each point
+    pub fn rmsd(&self, reference: &[[f64; 3]], weights: Option<&[f64]>) -> Result<f64> {
+        // sanity check
+        let npts = self.positions.len();
+        if reference.len() != npts {
+            bail!("points size mismatch!");
+        }
+        if weights.is_some() && weights.unwrap().len() != npts {
+            bail!("weights size mismatch!");
+        }
+
+        // calculate rmsd
+        let mut ws = 0.0f64;
+        for i in 0..npts {
+            // take the weight if any, or set it to 1.0
+            let wi = weights.map_or_else(|| 1.0, |w| w[i]);
+            let dx = wi * (self.positions[i][0] - reference[i][0]);
+            let dy = wi * (self.positions[i][1] - reference[i][1]);
+            let dz = wi * (self.positions[i][2] - reference[i][2]);
+
+            ws += dx.powi(2) + dy.powi(2) + dz.powi(2);
+        }
+        let ws = ws.sqrt();
+
+        Ok(ws)
+    }
+
+    /// Superpose candidate structure onto reference structure which will be held fixed
+    /// Return superposition struct
+    ///
+    /// Parameters
+    /// ----------
+    /// * reference: reference coordinates
+    /// * weights  : weight of each point
+    pub fn onto(&mut self, reference: &[[f64; 3]], weights: Option<&[f64]>) -> Result<Superposition> {
+        // calculate the RMSD & rotational matrix
+        let (rmsd, trans, rot) = match self.algorithm {
+            SuperpositionAlgo::QCP => self::qcprot::calc_rmsd_rotational_matrix(&reference, &self.positions, weights),
+            SuperpositionAlgo::Quaternion => self::quaternion::calc_rmsd_rotational_matrix(&reference, &self.positions, weights),
+        };
+
+        // return unit matrix if two structures are already close enough
+        let rotation_matrix = if let Some(rot) = rot {
+            Matrix3f::from_row_slice(&rot)
+        } else {
+            Matrix3f::identity()
+        };
+
+        // return superimposition result
+        let sp = Superposition {
+            rmsd,
+            translation: trans.into(),
+            rotation_matrix,
+        };
+
+        Ok(sp)
+    }
+}
+// superimpose:1 ends here
 
 // [[file:../gchemol-geometry.note::*test][test:1]]
 #[test]
@@ -175,10 +263,7 @@ fn test_alignment() {
     let (reference, candidate, weights) = qcprot::prepare_test_data();
 
     // construct alignment for superimposition
-    let mut align = Alignment::new(&candidate);
-
-    // alignment result
-    let sp = align.superpose(&reference, Some(&weights)).unwrap();
+    let sp = Superimpose::new(&candidate).onto(&reference, Some(&weights)).unwrap();
     let rot = sp.rotation_matrix;
 
     // validation
@@ -211,7 +296,7 @@ fn test_alignment_hcn() {
     let positions_can = [[-0.634504, -0.199638, -0.0], [0.970676, 0.670662, 0.0], [-0.337065, 0.926883, 0.0]];
 
     let weights = vec![0.0001; 3];
-    let sp = Alignment::new(&positions_can).superpose(&positions_ref, Some(&weights)).unwrap();
+    let sp = Superimpose::new(&positions_can).onto(&positions_ref, Some(&weights)).unwrap();
     assert_relative_eq!(sp.rmsd, 0.0614615, epsilon = 1e-4);
 
     let t = Vector3f::from([0.423160235, 0.2715202, 0.0]);
