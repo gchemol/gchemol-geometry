@@ -228,7 +228,7 @@ impl<'a> Superimpose<'a> {
     /// ----------
     /// * reference: reference coordinates
     /// * weights  : weight of each point
-    pub fn onto(&mut self, reference: &[[f64; 3]], weights: Option<&[f64]>) -> Result<Superposition> {
+    pub fn onto(&mut self, reference: &[[f64; 3]], weights: Option<&[f64]>) -> Superposition {
         // calculate the RMSD & rotational matrix
         let (rmsd, trans, rot) = match self.algorithm {
             SuperpositionAlgo::QCP => self::qcprot::calc_rmsd_rotational_matrix(&reference, &self.positions, weights),
@@ -243,13 +243,11 @@ impl<'a> Superimpose<'a> {
         };
 
         // return superimposition result
-        let sp = Superposition {
+        Superposition {
             rmsd,
             translation: trans.into(),
             rotation_matrix,
-        };
-
-        Ok(sp)
+        }
     }
 }
 // superimpose:1 ends here
@@ -263,7 +261,7 @@ fn test_alignment() {
     let (reference, candidate, weights) = qcprot::prepare_test_data();
 
     // construct alignment for superimposition
-    let sp = Superimpose::new(&candidate).onto(&reference, Some(&weights)).unwrap();
+    let sp = Superimpose::new(&candidate).onto(&reference, Some(&weights));
     let rot = sp.rotation_matrix;
 
     // validation
@@ -296,7 +294,7 @@ fn test_alignment_hcn() {
     let positions_can = [[-0.634504, -0.199638, -0.0], [0.970676, 0.670662, 0.0], [-0.337065, 0.926883, 0.0]];
 
     let weights = vec![0.0001; 3];
-    let sp = Superimpose::new(&positions_can).onto(&positions_ref, Some(&weights)).unwrap();
+    let sp = Superimpose::new(&positions_can).onto(&positions_ref, Some(&weights));
     assert_relative_eq!(sp.rmsd, 0.0614615, epsilon = 1e-4);
 
     let t = Vector3f::from([0.423160235, 0.2715202, 0.0]);
