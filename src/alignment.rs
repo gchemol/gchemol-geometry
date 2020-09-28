@@ -84,7 +84,7 @@ impl Superposition {
 // base:1 ends here
 
 // [[file:../gchemol-geometry.note::*alignment/deprecated][alignment/deprecated:1]]
-#[deprecated(note = "use Superimpose instead")]
+#[deprecated(note = "use Superpose instead")]
 /// Alignment of candidate structure onto the reference
 #[derive(Clone, Debug)]
 pub struct Alignment<'a> {
@@ -170,9 +170,11 @@ impl<'a> Alignment<'a> {
 // alignment/deprecated:1 ends here
 
 // [[file:../gchemol-geometry.note::*superimpose][superimpose:1]]
-/// Superimpose of candidate structure onto the reference
+pub type Superimpose<'a> = Superpose<'a>;
+
+/// Superpose of candidate structure onto the reference
 #[derive(Clone, Debug)]
-pub struct Superimpose<'a> {
+pub struct Superpose<'a> {
     /// The positions of the candidate structure
     positions: &'a [[f64; 3]],
 
@@ -180,7 +182,7 @@ pub struct Superimpose<'a> {
     pub algorithm: SuperpositionAlgo,
 }
 
-impl<'a> Superimpose<'a> {
+impl<'a> Superpose<'a> {
     /// Construct from positions of the candidate to be aligned
     pub fn new(positions: &'a [[f64; 3]]) -> Self {
         Self {
@@ -261,7 +263,7 @@ fn test_alignment() {
     let (reference, candidate, weights) = qcprot::prepare_test_data();
 
     // construct alignment for superimposition
-    let sp = Superimpose::new(&candidate).onto(&reference, Some(&weights));
+    let sp = Superpose::new(&candidate).onto(&reference, Some(&weights));
     let rot = sp.rotation_matrix;
 
     // validation
@@ -294,7 +296,7 @@ fn test_alignment_hcn() {
     let positions_can = [[-0.634504, -0.199638, -0.0], [0.970676, 0.670662, 0.0], [-0.337065, 0.926883, 0.0]];
 
     let weights = vec![0.0001; 3];
-    let sp = Superimpose::new(&positions_can).onto(&positions_ref, Some(&weights));
+    let sp = Superpose::new(&positions_can).onto(&positions_ref, Some(&weights));
     assert_relative_eq!(sp.rmsd, 0.0614615, epsilon = 1e-4);
 
     let t = Vector3f::from([0.423160235, 0.2715202, 0.0]);

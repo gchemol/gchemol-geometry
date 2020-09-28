@@ -1,13 +1,9 @@
-// imports
-
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
+// [[file:../gchemol-geometry.note::*imports][imports:1]]
 use gchemol_gut::prelude::*;
 use vecfx::*;
 // imports:1 ends here
 
-// functions
-
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*functions][functions:1]]
+// [[file:../gchemol-geometry.note::*functions][functions:1]]
 #[inline]
 /// Return Cartesian distance between two points in 3D space.
 pub fn euclidean_distance(p1: [f64; 3], p2: [f64; 3]) -> f64 {
@@ -50,9 +46,7 @@ pub fn weighted_center_of_geometry(positions: &[[f64; 3]], weights: &[f64]) -> R
 }
 // functions:1 ends here
 
-// test
-
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*test][test:1]]
+// [[file:../gchemol-geometry.note::*test][test:1]]
 #[test]
 fn test_weighted_center_of_geometry() {
     use approx::*;

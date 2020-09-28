@@ -1,4 +1,4 @@
-# [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*cargo][cargo:1]]
+# [[file:gchemol-geometry.note::*cargo][cargo:1]]
 [package]
 name = "gchemol-geometry"
 version = "0.0.40"
