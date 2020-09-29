@@ -2,8 +2,8 @@
 //! # Example
 //!
 //! ```no_run
-//! use gchemol_geometry::Superpose;
-//! use gchemol_core::Molecule;
+//! use gchemol::geom::Superpose;
+//! use gchemol::Molecule;
 //! use gchemol::prelude::*;
 //! 
 //! // load test molecules
