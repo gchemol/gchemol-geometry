@@ -257,7 +257,7 @@ impl<'a> Superpose<'a> {
 // [[file:../gchemol-geometry.note::*test][test:1]]
 #[test]
 fn test_alignment() {
-    use approx::*;
+    use vecfx::*;
 
     // fragment a
     let (reference, candidate, weights) = qcprot::prepare_test_data();
@@ -278,7 +278,7 @@ fn test_alignment() {
         0.56738509,
         0.68768304,
     ]);
-    assert_relative_eq!(rot_expected, rot, epsilon = 1e-4);
+    approx::assert_relative_eq!(rot_expected, rot, epsilon = 1e-4);
 }
 // test:1 ends here
 
@@ -297,10 +297,10 @@ fn test_alignment_hcn() {
 
     let weights = vec![0.0001; 3];
     let sp = Superpose::new(&positions_can).onto(&positions_ref, Some(&weights));
-    assert_relative_eq!(sp.rmsd, 0.0614615, epsilon = 1e-4);
+    approx::assert_relative_eq!(sp.rmsd, 0.0614615, epsilon = 1e-4);
 
     let t = Vector3f::from([0.423160235, 0.2715202, 0.0]);
     let r = Matrix3f::from_column_slice(&[-0.4167190, -0.9090353, 0.0, -0.909035, 0.4167190, 0.0, 0.0, 0.0, -1.0]);
-    assert_relative_eq!(sp.rotation_matrix, r, epsilon = 1e-4);
+    approx::assert_relative_eq!(sp.rotation_matrix, r, epsilon = 1e-4);
 }
 // test:2 ends here

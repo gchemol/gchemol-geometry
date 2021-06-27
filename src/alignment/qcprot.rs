@@ -1,8 +1,8 @@
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
+// [[file:../../gchemol-geometry.note::*imports][imports:1]]
 use gchemol_gut::prelude::*;
 // imports:1 ends here
 
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*header][header:1]]
+// [[file:../../gchemol-geometry.note::*header][header:1]]
 // Author of Rust Port:
 //                 Wenping Guo
 //                 Synefuels China Technology Co.Ltd.
@@ -95,7 +95,7 @@ use gchemol_gut::prelude::*;
 //                    sum of weights (thanks to Geoff Skillman)
 // header:1 ends here
 
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*core][core:1]]
+// [[file:../../gchemol-geometry.note::*core][core:1]]
 /// Calculate the inner product of two structures.
 ///
 /// Parameters
@@ -451,7 +451,7 @@ pub(super) fn calc_rmsd_rotational_matrix(
 }
 // core:1 ends here
 
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*test][test:1]]
+// [[file:../../gchemol-geometry.note::*test][test:1]]
 /// test data provided in main.c
 pub(crate) fn prepare_test_data() -> (Vec<[f64; 3]>, Vec<[f64; 3]>, Vec<f64>) {
     let frag_a = vec![
@@ -481,7 +481,7 @@ pub(crate) fn prepare_test_data() -> (Vec<[f64; 3]>, Vec<[f64; 3]>, Vec<f64>) {
 
 #[test]
 fn test_qcprot() {
-    use approx::*;
+    use vecfx::approx::assert_relative_eq;
 
     let (mut frag_a, mut frag_b, weights) = prepare_test_data();
     let (rmsd, trans, rot) = calc_rmsd_rotational_matrix(&mut frag_a, &mut frag_b, Some(&weights));

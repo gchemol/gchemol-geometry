@@ -43,8 +43,4 @@ pub use crate::random::*;
 
 #[cfg(feature="adhoc")]
 pub use crate::transform::*;
-
-#[cfg(test)]
-#[macro_use]
-extern crate approx;
 // pub:1 ends here

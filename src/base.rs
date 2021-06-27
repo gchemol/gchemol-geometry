@@ -49,7 +49,7 @@ pub fn weighted_center_of_geometry(positions: &[[f64; 3]], weights: &[f64]) -> R
 // [[file:../gchemol-geometry.note::*test][test:1]]
 #[test]
 fn test_weighted_center_of_geometry() {
-    use approx::*;
+    use vecfx::approx::assert_relative_eq;
 
     // points
     let frag = vec![

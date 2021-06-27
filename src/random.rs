@@ -1,6 +1,4 @@
-// imports
-
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
+// [[file:../gchemol-geometry.note::*imports][imports:1]]
 use rand::distributions::Uniform;
 use rand::{self, Rng};
 use rand_distr::Normal;
@@ -11,9 +9,7 @@ use crate::transform::*;
 use vecfx::*;
 // imports:1 ends here
 
-// base
-
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*base][base:1]]
+// [[file:../gchemol-geometry.note::*base][base:1]]
 type Point3D = [f64; 3];
 type Points = Vec<Point3D>;
 
@@ -96,9 +92,7 @@ pub fn rand_points_within_sphere(radius: f64, npts: usize) -> Points {
 }
 // base:1 ends here
 
-// nalgebra
-
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*nalgebra][nalgebra:1]]
+// [[file:../gchemol-geometry.note::*nalgebra][nalgebra:1]]
 pub fn rand_rotate(points: &Points) -> Points {
     let p = rand_point_on_sphere(1.0);
     let v = Vector3f::from(p);
@@ -107,13 +101,11 @@ pub fn rand_rotate(points: &Points) -> Points {
 }
 // nalgebra:1 ends here
 
-// test
-
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*test][test:1]]
+// [[file:../gchemol-geometry.note::*test][test:1]]
 #[test]
 fn test_rand_rotate() {
-    use approx::*;
     use std::f64;
+    use vecfx::approx::assert_relative_eq;
 
     let points = [[-0.02264019, -0.01300713, -0.06295011],
                   [ 1.37326881, -0.01300713, -0.06295011],
