@@ -1,12 +1,11 @@
-// [[file:../gchemol-geometry.note::*imports][imports:1]]
-use gchemol_gut::prelude::*;
-use vecfx::*;
-// imports:1 ends here
+// [[file:../gchemol-geometry.note::ee1c9917][ee1c9917]]
+use super::*;
+// ee1c9917 ends here
 
-// [[file:../gchemol-geometry.note::*functions][functions:1]]
+// [[file:../gchemol-geometry.note::3dde6602][3dde6602]]
 #[inline]
 /// Return Cartesian distance between two points in 3D space.
-pub fn euclidean_distance(p1: [f64; 3], p2: [f64; 3]) -> f64 {
+pub fn euclidean_distance(p1: Coord3, p2: Coord3) -> f64 {
     let mut d2 = 0.0;
     for v in 0..3 {
         let dv = p2[v] - p1[v];
@@ -17,7 +16,7 @@ pub fn euclidean_distance(p1: [f64; 3], p2: [f64; 3]) -> f64 {
 }
 
 /// Return the geometric center
-pub fn weighted_center_of_geometry(positions: &[[f64; 3]], weights: &[f64]) -> Result<Vector3f> {
+pub fn weighted_center_of_geometry(positions: &[Coord3], weights: &[f64]) -> Result<Vector3f> {
     let npts = positions.len();
     let mut pc = [0.0; 3];
 
@@ -44,7 +43,11 @@ pub fn weighted_center_of_geometry(positions: &[[f64; 3]], weights: &[f64]) -> R
 
     Ok(Vector3f::from(pc))
 }
-// functions:1 ends here
+// 3dde6602 ends here
+
+// [[file:../gchemol-geometry.note::2efeddb3][2efeddb3]]
+pub type Coord3 = [f64; 3];
+// 2efeddb3 ends here
 
 // [[file:../gchemol-geometry.note::*test][test:1]]
 #[test]

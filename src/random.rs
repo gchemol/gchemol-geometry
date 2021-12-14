@@ -1,4 +1,4 @@
-// [[file:../gchemol-geometry.note::*imports][imports:1]]
+// [[file:../gchemol-geometry.note::f5cbd18a][f5cbd18a]]
 use rand::distributions::Uniform;
 use rand::{self, Rng};
 use rand_distr::Normal;
@@ -6,8 +6,8 @@ use rand_distr::Normal;
 use crate::base::euclidean_distance;
 use crate::transform::*;
 
-use vecfx::*;
-// imports:1 ends here
+use super::*;
+// f5cbd18a ends here
 
 // [[file:../gchemol-geometry.note::*base][base:1]]
 type Point3D = [f64; 3];

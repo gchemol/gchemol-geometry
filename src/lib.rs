@@ -25,22 +25,32 @@
 //! ```
 // docs:1 ends here
 
-// [[file:../gchemol-geometry.note::*mods][mods:1]]
+// [[file:../gchemol-geometry.note::f065136b][f065136b]]
+use gchemol_gut::prelude::*;
+use vecfx::*;
+// f065136b ends here
+
+// [[file:../gchemol-geometry.note::a70e28c8][a70e28c8]]
 mod alignment;
 mod base;
 mod random;
+mod traits;
 mod transform;
-// mods:1 ends here
+// a70e28c8 ends here
 
-// [[file:../gchemol-geometry.note::*pub][pub:1]]
+// [[file:../gchemol-geometry.note::62451bc9][62451bc9]]
 pub use crate::alignment::*;
 
-#[cfg(feature="adhoc")]
+#[cfg(feature = "adhoc")]
 pub use crate::base::*;
 
-#[cfg(feature="adhoc")]
+#[cfg(feature = "adhoc")]
 pub use crate::random::*;
 
-#[cfg(feature="adhoc")]
+#[cfg(feature = "adhoc")]
 pub use crate::transform::*;
-// pub:1 ends here
+
+pub mod prelude {
+    pub use crate::traits::*;
+}
+// 62451bc9 ends here

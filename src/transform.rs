@@ -1,17 +1,12 @@
-// imports
-
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
+// [[file:../gchemol-geometry.note::7ba19d02][7ba19d02]]
+use super::*;
 use crate::base::euclidean_distance;
 
-use vecfx::nalgebra as na;
-use vecfx::*;
-
 use na::{Rotation3, Vector3};
-// imports:1 ends here
+use nalgebra as na;
+// 7ba19d02 ends here
 
-// impl
-
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*impl][impl:1]]
+// [[file:../gchemol-geometry.note::*impl][impl:1]]
 type Point3 = [f64; 3];
 type Points = Vec<Point3>;
 
