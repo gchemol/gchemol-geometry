@@ -1,11 +1,11 @@
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*imports][imports:1]]
+// [[file:../../gchemol-geometry.note::*imports][imports:1]]
 use gchemol_gut::prelude::*;
 use vecfx::*;
 
 use vecfx::nalgebra as na;
 // imports:1 ends here
 
-// [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*core][core:1]]
+// [[file:../../gchemol-geometry.note::7a61c077][7a61c077]]
 pub(super) fn calc_rmsd_rotational_matrix(
     positions_ref: &[[f64; 3]],
     positions_can: &[[f64; 3]],
@@ -21,8 +21,8 @@ pub(super) fn calc_rmsd_rotational_matrix(
     let weights = weights.unwrap_or(&default_weights);
 
     // FIXME: Option
-    let com_ref = crate::base::weighted_center_of_geometry(&positions_ref, weights).unwrap();
-    let com_can = crate::base::weighted_center_of_geometry(&positions_can, weights).unwrap();
+    let com_ref: Vector3f = crate::base::weighted_center_of_geometry(&positions_ref, weights).into();
+    let com_can: Vector3f = crate::base::weighted_center_of_geometry(&positions_can, weights).into();
 
     // 1. center coordinates of the reference and the candidate
     let mut vectors_ref: Vec<_> = positions_ref.iter().map(|p| p.to_vector()).collect();
@@ -123,4 +123,4 @@ pub(super) fn calc_rmsd_rotational_matrix(
     let trans = [com_ref[0] - rotc[0], com_ref[1] - rotc[1], com_ref[2] - rotc[2]];
     return (rmsd, trans, rotation);
 }
-// core:1 ends here
+// 7a61c077 ends here

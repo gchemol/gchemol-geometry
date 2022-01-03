@@ -15,22 +15,17 @@ pub fn euclidean_distance(p1: Coord3, p2: Coord3) -> f64 {
     d2.sqrt()
 }
 
-/// Return the geometric center
-pub fn weighted_center_of_geometry(positions: &[Coord3], weights: &[f64]) -> Result<Vector3f> {
+// FIXME: when sum of weight is too large
+/// Return the weighted geometric center
+pub fn weighted_center_of_geometry(positions: &[Coord3], weights: &[f64]) -> Coord3 {
     let npts = positions.len();
-    let mut pc = [0.0; 3];
-
-    // sanity check
-    if npts != weights.len() {
-        bail!("size inconsistent!");
-    }
+    assert_eq!(npts, weights.len(), "array size mismatch between positions and weights");
 
     // deviding by zero?
     let wsum = weights.sum();
-    if wsum < 1e-6 {
-        error!("weird weight sum: {:?}", wsum);
-    }
+    assert_ne!(wsum, 0.0, "invalid sum of weights");
 
+    let mut pc = [0.0; 3];
     for i in 0..npts {
         for j in 0..3 {
             pc[j] += weights[i] * positions[i][j];
@@ -41,15 +36,11 @@ pub fn weighted_center_of_geometry(positions: &[Coord3], weights: &[f64]) -> Res
         pc[i] /= wsum;
     }
 
-    Ok(Vector3f::from(pc))
+    pc
 }
 // 3dde6602 ends here
 
-// [[file:../gchemol-geometry.note::2efeddb3][2efeddb3]]
-pub type Coord3 = [f64; 3];
-// 2efeddb3 ends here
-
-// [[file:../gchemol-geometry.note::*test][test:1]]
+// [[file:../gchemol-geometry.note::30f52d4f][30f52d4f]]
 #[test]
 fn test_weighted_center_of_geometry() {
     use vecfx::approx::assert_relative_eq;
@@ -71,7 +62,7 @@ fn test_weighted_center_of_geometry() {
 
     // expected results
     let expected = Vector3f::new(0.3687142857142857, -13.15214285714286, 29.955499999999997);
-    let pc = weighted_center_of_geometry(&frag, &masses).expect("geometry: com");
-    assert_relative_eq!(pc, expected, epsilon = 1e-6);
+    let pc = weighted_center_of_geometry(&frag, &masses);
+    assert_relative_eq!(Vector3f::from(pc), expected, epsilon = 1e-6);
 }
-// test:1 ends here
+// 30f52d4f ends here

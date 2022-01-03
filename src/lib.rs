@@ -39,6 +39,9 @@ mod transform;
 // a70e28c8 ends here
 
 // [[file:../gchemol-geometry.note::62451bc9][62451bc9]]
+/// Three-dimensional Cartesian coordinates
+pub type Coord3 = [f64; 3];
+
 pub use crate::alignment::*;
 
 #[cfg(feature = "adhoc")]
