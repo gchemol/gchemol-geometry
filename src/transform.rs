@@ -6,12 +6,11 @@ use na::{Rotation3, Vector3};
 use nalgebra as na;
 // 7ba19d02 ends here
 
-// [[file:../gchemol-geometry.note::*impl][impl:1]]
-type Point3 = [f64; 3];
-type Points = Vec<Point3>;
+// [[file:../gchemol-geometry.note::fb6473d0][fb6473d0]]
+type Points = Vec<Coord3>;
 
 /// Translate all points to a new location
-pub fn translate(points: &mut Points, loc: Point3) {
+pub fn translate(points: &mut Points, loc: Coord3) {
     for i in 0..points.len() {
         for v in 0..3 {
             points[i][v] += loc[v];
@@ -42,7 +41,7 @@ pub fn close_contact(points: &Points) -> bool {
 }
 
 /// Return all distances between any pair of points
-pub fn get_distance_matrix(points: &[Point3]) -> Vec<Vec<f64>> {
+pub fn get_distance_matrix(points: &[Coord3]) -> Vec<Vec<f64>> {
     let npts = points.len();
 
     // fill distance matrix
@@ -60,7 +59,7 @@ pub fn get_distance_matrix(points: &[Point3]) -> Vec<Vec<f64>> {
 }
 
 /// rotate coordinates about x axis in radian
-pub fn rotate_about_x_axis(points: &Points, angle: f64, center: Point3) -> Points {
+pub fn rotate_about_x_axis(points: &Points, angle: f64, center: Coord3) -> Points {
     let axis = Vector3::x_axis();
     let r = Rotation3::from_axis_angle(&axis, angle);
 
@@ -68,7 +67,7 @@ pub fn rotate_about_x_axis(points: &Points, angle: f64, center: Point3) -> Point
     let center = Vector3::from(center);
     for &p in points.iter() {
         let v = Vector3::from(p) - center;
-        let t: Point3 = (r * v + center).into();
+        let t: Coord3 = (r * v + center).into();
         rpoints.push(t);
     }
 
@@ -88,4 +87,4 @@ pub fn point_invert(positions: &[[f64; 3]]) -> Vector3fVec {
     let r = na::Matrix3::from_diagonal(&[-1.0, -1.0, -1.0].into());
     r * m
 }
-// impl:1 ends here
+// fb6473d0 ends here

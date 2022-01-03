@@ -3,8 +3,8 @@ use super::*;
 // ee1c9917 ends here
 
 // [[file:../gchemol-geometry.note::3dde6602][3dde6602]]
-#[inline]
 /// Return Cartesian distance between two points in 3D space.
+#[inline]
 pub fn euclidean_distance(p1: Coord3, p2: Coord3) -> f64 {
     let mut d2 = 0.0;
     for v in 0..3 {
@@ -17,6 +17,7 @@ pub fn euclidean_distance(p1: Coord3, p2: Coord3) -> f64 {
 
 // FIXME: when sum of weight is too large
 /// Return the weighted geometric center
+#[inline]
 pub fn weighted_center_of_geometry(positions: &[Coord3], weights: &[f64]) -> Coord3 {
     let npts = positions.len();
     assert_eq!(npts, weights.len(), "array size mismatch between positions and weights");
