@@ -43,8 +43,6 @@ mod transform;
 pub type Coord3 = [f64; 3];
 
 pub use crate::alignment::*;
-
-#[cfg(feature = "adhoc")]
 pub use crate::base::*;
 
 #[cfg(feature = "adhoc")]

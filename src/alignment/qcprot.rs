@@ -451,7 +451,7 @@ pub(super) fn calc_rmsd_rotational_matrix(
 }
 // core:1 ends here
 
-// [[file:../../gchemol-geometry.note::*test][test:1]]
+// [[file:../../gchemol-geometry.note::65cc6971][65cc6971]]
 /// test data provided in main.c
 pub(crate) fn prepare_test_data() -> (Vec<[f64; 3]>, Vec<[f64; 3]>, Vec<f64>) {
     let frag_a = vec![
@@ -487,21 +487,14 @@ fn test_qcprot() {
     let (rmsd, trans, rot) = calc_rmsd_rotational_matrix(&mut frag_a, &mut frag_b, Some(&weights));
     assert_relative_eq!(0.745016, rmsd, epsilon = 1e-3);
 
-    let rot_expected = [
-        0.77227551,
-        0.63510272,
-        -0.01533190,
-        -0.44544846,
-        0.52413614,
-        -0.72584914,
-        -0.45295276,
-        0.56738509,
-        0.68768304,
-    ];
+    #[rustfmt::skip]
+    let rot_expected = [0.77227551, 0.63510272, -0.01533190,
+                       -0.44544846, 0.52413614, -0.72584914,
+                       -0.45295276, 0.56738509, 0.68768304];
 
     let rot = rot.expect("rot matrix");
     for i in 0..9 {
         assert_relative_eq!(rot_expected[i], rot[i], epsilon = 1e-4);
     }
 }
-// test:1 ends here
+// 65cc6971 ends here
