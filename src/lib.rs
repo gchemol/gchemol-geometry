@@ -1,7 +1,7 @@
-// [[file:../gchemol-geometry.note::*docs][docs:1]]
+// [[file:../gchemol-geometry.note::5e31e50b][5e31e50b]]
 //! # Example
 //!
-//! ```no_run
+//! ```ignore
 //! use gchemol::geom::Superpose;
 //! use gchemol::Molecule;
 //! use gchemol::prelude::*;
@@ -23,7 +23,7 @@
 //! // apply translation only
 //! let translated_structure = sp.apply_translation(&candidate);
 //! ```
-// docs:1 ends here
+// 5e31e50b ends here
 
 // [[file:../gchemol-geometry.note::f065136b][f065136b]]
 use gchemol_gut::prelude::*;
