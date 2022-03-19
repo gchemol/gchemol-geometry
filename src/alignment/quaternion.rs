@@ -1,9 +1,9 @@
-// [[file:../../gchemol-geometry.note::*imports][imports:1]]
-use gchemol_gut::prelude::*;
+// [[file:../../gchemol-geometry.note::fa94cef3][fa94cef3]]
+use super::*;
 use vecfx::*;
 
 use vecfx::nalgebra as na;
-// imports:1 ends here
+// fa94cef3 ends here
 
 // [[file:../../gchemol-geometry.note::7a61c077][7a61c077]]
 pub(super) fn calc_rmsd_rotational_matrix(

@@ -2,11 +2,11 @@
 use rand::distributions::Uniform;
 use rand::{self, Rng};
 use rand_distr::Normal;
-
-use crate::base::euclidean_distance;
-use crate::transform::*;
+use vecfx::*;
 
 use super::*;
+use crate::base::euclidean_distance;
+use crate::transform::*;
 // f5cbd18a ends here
 
 // [[file:../gchemol-geometry.note::*base][base:1]]

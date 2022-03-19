@@ -1,6 +1,6 @@
-// [[file:../../gchemol-geometry.note::*imports][imports:1]]
-use gchemol_gut::prelude::*;
-// imports:1 ends here
+// [[file:../../gchemol-geometry.note::2cfcf0db][2cfcf0db]]
+use super::*;
+// 2cfcf0db ends here
 
 // [[file:../../gchemol-geometry.note::*header][header:1]]
 // Author of Rust Port:

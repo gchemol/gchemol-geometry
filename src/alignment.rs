@@ -1,15 +1,14 @@
+// [[file:../gchemol-geometry.note::040d137b][040d137b]]
+use super::*;
+use vecfx::*;
+
+type Point3 = [f64; 3];
+// 040d137b ends here
+
 // [[file:../gchemol-geometry.note::*mods][mods:1]]
 mod qcprot;
 mod quaternion;
 // mods:1 ends here
-
-// [[file:../gchemol-geometry.note::*imports][imports:1]]
-use gchemol_gut::prelude::*;
-
-use vecfx::*;
-
-type Point3 = [f64; 3];
-// imports:1 ends here
 
 // [[file:../gchemol-geometry.note::*base][base:1]]
 #[derive(Clone, Copy, Debug)]

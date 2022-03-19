@@ -1,6 +1,7 @@
 // [[file:../gchemol-geometry.note::7ba19d02][7ba19d02]]
 use super::*;
 use crate::base::euclidean_distance;
+use vecfx::*;
 
 use na::{Rotation3, Vector3};
 use nalgebra as na;

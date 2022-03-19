@@ -1,5 +1,6 @@
 // [[file:../gchemol-geometry.note::c1257b7a][c1257b7a]]
 use super::*;
+use vecfx::*;
 // c1257b7a ends here
 
 // [[file:../gchemol-geometry.note::23e4530d][23e4530d]]

@@ -26,8 +26,7 @@
 // 5e31e50b ends here
 
 // [[file:../gchemol-geometry.note::f065136b][f065136b]]
-use gchemol_gut::prelude::*;
-use vecfx::*;
+use gut::prelude::*;
 // f065136b ends here
 
 // [[file:../gchemol-geometry.note::a70e28c8][a70e28c8]]
