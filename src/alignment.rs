@@ -168,7 +168,8 @@ impl<'a> Alignment<'a> {
 }
 // alignment/deprecated:1 ends here
 
-// [[file:../gchemol-geometry.note::*superimpose][superimpose:1]]
+// [[file:../gchemol-geometry.note::62a7ce8f][62a7ce8f]]
+/// Alias name of `Superpose`
 pub type Superimpose<'a> = Superpose<'a>;
 
 /// Superpose of candidate structure onto the reference
@@ -251,7 +252,7 @@ impl<'a> Superpose<'a> {
         }
     }
 }
-// superimpose:1 ends here
+// 62a7ce8f ends here
 
 // [[file:../gchemol-geometry.note::*test][test:1]]
 #[test]

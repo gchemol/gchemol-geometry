@@ -32,9 +32,10 @@ use gut::prelude::*;
 // [[file:../gchemol-geometry.note::a70e28c8][a70e28c8]]
 mod alignment;
 mod base;
-mod random;
 mod traits;
 mod transform;
+
+pub mod random;
 // a70e28c8 ends here
 
 // [[file:../gchemol-geometry.note::62451bc9][62451bc9]]
@@ -43,9 +44,6 @@ pub type Coord3 = [f64; 3];
 
 pub use crate::alignment::*;
 pub use crate::base::*;
-
-#[cfg(feature = "adhoc")]
-pub use crate::random::*;
 
 #[cfg(feature = "adhoc")]
 pub use crate::transform::*;

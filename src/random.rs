@@ -1,4 +1,6 @@
 // [[file:../gchemol-geometry.note::f5cbd18a][f5cbd18a]]
+//! Generate 3D coordinates randomly
+
 use rand::distributions::Uniform;
 use rand::{self, Rng};
 use rand_distr::Normal;
@@ -9,15 +11,15 @@ use crate::base::euclidean_distance;
 use crate::transform::*;
 // f5cbd18a ends here
 
-// [[file:../gchemol-geometry.note::*base][base:1]]
-type Point3D = [f64; 3];
-type Points = Vec<Point3D>;
+// [[file:../gchemol-geometry.note::c478bdce][c478bdce]]
+type Point3 = Coord3;
+type Points = Vec<Point3>;
 
 /// create a random point within a sphere
 /// References
 /// ----------
 /// https://stackoverflow.com/a/5408344
-pub fn rand_point_within_sphere(radius: f64) -> Point3D {
+pub fn rand_point_within_sphere(radius: f64) -> Point3 {
     debug_assert!(
         radius.is_sign_positive(),
         "sphere radius cannot be negative: {:?}",
@@ -42,8 +44,12 @@ pub fn rand_point_within_sphere(radius: f64) -> Point3D {
 /// Generating uniformly distributed point on a sphere
 /// Alternative method 1 as described in:
 /// http://corysimon.github.io/articles/uniformdistn-on-sphere/
-pub fn rand_point_on_sphere(radius: f64) -> Point3D {
-    debug_assert!(radius > 0.0, "sphere radius cannot be negative: {:?}", radius);
+pub fn rand_point_on_sphere(radius: f64) -> Point3 {
+    debug_assert!(
+        radius > 0.0,
+        "sphere radius cannot be negative: {:?}",
+        radius
+    );
 
     let mut rng = rand::thread_rng();
 
@@ -90,7 +96,7 @@ pub fn rand_points_within_sphere(radius: f64, npts: usize) -> Points {
         }
     }
 }
-// base:1 ends here
+// c478bdce ends here
 
 // [[file:../gchemol-geometry.note::*nalgebra][nalgebra:1]]
 pub fn rand_rotate(points: &Points) -> Points {
