@@ -98,14 +98,14 @@ pub fn rand_points_within_sphere(radius: f64, npts: usize) -> Points {
 }
 // c478bdce ends here
 
-// [[file:../gchemol-geometry.note::*nalgebra][nalgebra:1]]
+// [[file:../gchemol-geometry.note::2bd2840d][2bd2840d]]
 pub fn rand_rotate(points: &Points) -> Points {
     let p = rand_point_on_sphere(1.0);
     let v = Vector3f::from(p);
     let angle = v.angle(&Vector3f::x_axis());
     rotate_about_x_axis(points, angle, [0.0, 0.0, 0.0])
 }
-// nalgebra:1 ends here
+// 2bd2840d ends here
 
 // [[file:../gchemol-geometry.note::*test][test:1]]
 #[test]

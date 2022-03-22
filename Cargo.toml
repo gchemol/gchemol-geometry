@@ -17,7 +17,7 @@ vecfx = { version = "0.1.2", features = ["nalgebra"] }
 gut = {version="0.2", package="gchemol-gut"}
 
 [dev-dependencies]
-tempfile = "3.2"
+tempfile = "3.3"
 
 [features]
 adhoc = [] # for adhoc hacking
