@@ -1,13 +1,24 @@
-# cargo
-
-# [[file:~/Workspace/Programming/gchemol-rs/gchemol-geometry/gchemol-geometry.note::*cargo][cargo:1]]
+# [[file:gchemol-geometry.note::fb06fa16][fb06fa16]]
 [package]
 name = "gchemol-geometry"
-version = "0.1.0-alpha1"
-edition = "2018"
+version = "0.1.1"
+edition = "2021"
 authors = ["Wenping Guo <ybyygu@gmail.com>"]
+description = "gchemol: a Graph-based CHEMical Objects Library"
+homepage = "https://github.com/gchemol/gchemol-geometry"
+repository = "https://github.com/gchemol/gchemol-geometry"
+license = "GPL-3.0"
+exclude = ["bin/*", "docs/*", "ltxpng/*", "data/*"]
 
 [dependencies]
+rand = "0.8"
+rand_distr = "0.4"
+vecfx = { version = "0.1.2", features = ["nalgebra"] }
+gut = {version="0.4", package="gchemol-gut"}
 
 [dev-dependencies]
-# cargo:1 ends here
+tempfile = "3.3"
+
+[features]
+adhoc = [] # for adhoc hacking
+# fb06fa16 ends here
